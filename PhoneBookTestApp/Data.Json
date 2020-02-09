@@ -1,0 +1,15 @@
+﻿[
+  {
+    "Name": "John Smith",
+    "PhoneNumber": "(248) 123-4567",
+    "Address": "1234 Sand Hill Dr, Royal Oak, MI"
+  },
+  {
+    "Name": "Cynthia Smith",
+    "PhoneNumber": "(824) 128-8758",
+    "Address": "875 Main St, Ann Arbor, MI"
+  }
+]
+
+//John Smith, (248) 123-4567, 1234 Sand Hill Dr, Royal Oak, MI
+        //        * Cynthia Smith, (824) 128-8758, 875 Main St, Ann Arbor, MI
