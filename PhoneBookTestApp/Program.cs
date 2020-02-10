@@ -13,8 +13,8 @@ namespace PhoneBookTestApp
         private static PhoneBook phonebook = new PhoneBook();
 
         //temporary constants 
-        const String FNAME = "Dave";
-        const String LNAME = "Williams";
+        const String FNAME = "Cynthia";
+        const String LNAME = "Smith";
         //Dave Williams
         static void Main(string[] args)
         {
@@ -47,59 +47,103 @@ namespace PhoneBookTestApp
                 PhoneBookDL phoneBookOperations = new PhoneBookDL();
                 phoneBookOperations.InsertPhoneBookToDataBase(); //Add data into DataBase
                 #endregion
-
-                #region DisplayPhoneBook
-                Console.WriteLine("------------------PhoneBook----------------");
-                phonebook.PrintPhoneBook(Display.Print);
-                #endregion
-
-                #region FindPerson
-                Console.WriteLine("------------------Searched Record----------------");
-
-                Person person = new Person();
-                person = phonebook.findPerson(FNAME, LNAME);
-                if (person != null)
+                string choice = "";
+                do
                 {
-                    Display.Print(person);
-                }
-                else
-                {
-                    Console.WriteLine("Person " +FNAME+" "+LNAME +"Not found");
-                    throw new System.ArgumentException("Person Not Present In PhoneBook", FNAME+" " +LNAME);
-                }
-                #endregion
 
-                #region AddNewPerson
-                Console.WriteLine("-----------------Enter New Person ----------------");
+                    Console.WriteLine("1. DisplayPhoneBook");
 
-                Console.WriteLine("Enter First Name:");
-                string firstName = Console.ReadLine();
+                    Console.WriteLine("2. Insert Person Details in PhoneBook");
 
-                Console.WriteLine("Enter Last Name:");
-                string lastName = Console.ReadLine();
+                    Console.WriteLine("3.Find Person By Name");
 
-                person.Name = firstName + " " + lastName;
+                    Console.WriteLine("4.Exit");
 
-                Console.WriteLine("Enter PhoneNumber Name:");
-                person.PhoneNumber = Console.ReadLine();
+                    choice = Console.ReadLine();
 
-                Console.WriteLine("Enter Address Name:");
-                person.Address = Console.ReadLine();
+                    switch (choice)
 
-                PhoneDL phoneDL = new PhoneDL();
-                phoneDL.InsertPerson(person);
-                #endregion
+                    {
 
-                Console.WriteLine("------------------PhoneBook----------------");
-                phonebook.PrintPhoneBook(Display.Print);
+                        case "1":
+                            #region DisplayPhoneBook
+                            Console.WriteLine("------------------PhoneBook----------------");
+                            phonebook.PrintPhoneBook(Display.Print);
+                            #endregion
+                            break;
 
+                        case "2": //Do that
+                            #region AddNewPerson
+                            Console.WriteLine("-----------------Enter New Person ----------------");
 
-                Console.ReadLine();
+                            Console.WriteLine("Enter First Name:");
+                            string firstName = Console.ReadLine();
+
+                            Console.WriteLine("Enter Last Name:");
+                            string lastName = Console.ReadLine();
+                            Person personObj = new Person();
+                            if (Validation.ValidateName(firstName + " " + lastName))
+                            {
+                                personObj.Name = firstName + " " + lastName;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Invalid Name ,\n should contain only Letters\n Firstname lastname should not be blank\n");
+                                break;
+                            }
+                            Console.WriteLine("Enter PhoneNumber Name:");
+                            personObj.PhoneNumber = Console.ReadLine();
+
+                            Console.WriteLine("Enter Address Name:");
+                            personObj.Address = Console.ReadLine();
+
+                            PhoneDL phoneDL = new PhoneDL();
+                            phoneDL.InsertPerson(personObj);
+                            #endregion
+                            break;
+                        case "3":
+                            #region FindPerson
+                            Console.WriteLine("------------------Searched Record----------------");
+
+                            Console.WriteLine("Enter First Name:");
+                            firstName = Console.ReadLine();
+
+                            Console.WriteLine("Enter Last Name:");
+                            lastName = Console.ReadLine();
+                           
+                            if (!Validation.ValidateName(firstName + " " + lastName))
+                            {
+                                Console.WriteLine("Invalid Name ,\n should contain only Letters\n Firstname lastname should not be blank\n");
+                                break;
+                            }
+                            Person person = new Person();
+                            person = phonebook.findPerson(firstName, lastName);
+                            if (person != null)
+                            {
+                                Display.Print(person);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Person " + firstName + " " + lastName + "Not found");
+                                break;
+                            }
+                            #endregion
+                            break;
+                    }
+
+                } while (choice != "4");
+
+               
+
+               
+                
+
+                
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-
+                Console.ReadLine();
             }
             finally
             {
