@@ -47,17 +47,18 @@ namespace PhoneBookTestApp
         public Person findPerson(string firstName, string lastName)
         {
             try {
-                Person p1 = null;
-                string Name = firstName + " " + lastName;
-                foreach(Person person in phoneBookList)
+                string name = firstName + " " + lastName;
+                Person person;
+                foreach(Person personItem in phoneBookList)
                 {
-                    if(person.Name.ToLower().Equals(Name.ToLower()))
+                    if(personItem.Name.ToLower().Equals(name.ToLower()))
                     {
-                        return person;
+                        return personItem;
                     }
                 }
-
-                return p1;
+                PhoneBookDL phoneBookDLObj = new PhoneBookDL();
+                person=phoneBookDLObj.findPersonByName(firstName, lastName);
+                return person;
                 
             }
             catch

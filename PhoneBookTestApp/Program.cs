@@ -11,7 +11,11 @@ namespace PhoneBookTestApp
     class Program
     {
         private static PhoneBook phonebook = new PhoneBook();
-             
+
+        //temporary constants 
+        const String FNAME = "Dave";
+        const String LNAME = "Williams";
+        //Dave Williams
         static void Main(string[] args)
         {
             try
@@ -23,52 +27,54 @@ namespace PhoneBookTestApp
                 // TODO: print the phone book out to System.out
                 // TODO: find Cynthia Smith and print out just her entry
                 // TODO: insert the new person objects into the database
-# region InitializeDataBase 
+                #region InitializeDataBase 
                 DatabaseUtil.CleanUp();
                 DatabaseUtil.initializeDatabase();
                 #endregion
-
-#region LoadData
-                List<Person> people =LoadJson.LoadData();
+                
+                #region LoadData
+                List<Person> personList = LoadJson.LoadData();
                 #endregion
 
-#region AddDataToPhoneBook
-                foreach (Person perso in people)
+                #region AddDataToPhoneBook
+                foreach (Person personItem in personList)
                 {
-                    phonebook.addPerson(perso); //add data into phoneBook
+                    phonebook.addPerson(personItem); //add data into phoneBook
                 }
                 #endregion
 
-#region AddDataToDataBase
-                PhoneBookDL dL = new PhoneBookDL();
-                dL.InsertPhoneBookToDataBase(); //Add data into DataBase
+                #region AddDataToDataBase
+                PhoneBookDL phoneBookOperations = new PhoneBookDL();
+                phoneBookOperations.InsertPhoneBookToDataBase(); //Add data into DataBase
                 #endregion
 
-#region DisplayPhoneBook
+                #region DisplayPhoneBook
                 Console.WriteLine("------------------PhoneBook----------------");
-                Person person = new Person();
                 phonebook.PrintPhoneBook(Display.Print);
                 #endregion
 
-#region FindPerson
+                #region FindPerson
                 Console.WriteLine("------------------Searched Record----------------");
-                person = phonebook.findPerson("Cynthia", "Smith");
+
+                Person person = new Person();
+                person = phonebook.findPerson(FNAME, LNAME);
                 if (person != null)
                 {
-                   Display.Print(person);
+                    Display.Print(person);
                 }
                 else
                 {
-                    Console.WriteLine("Data Not found for search firstname=Cynthia and lastName=Smith");
+                    Console.WriteLine("Person " +FNAME+" "+LNAME +"Not found");
+                    throw new System.ArgumentException("Person Not Present In PhoneBook", FNAME+" " +LNAME);
                 }
                 #endregion
 
-#region AddNewPerson
+                #region AddNewPerson
                 Console.WriteLine("-----------------Enter New Person ----------------");
 
                 Console.WriteLine("Enter First Name:");
                 string firstName = Console.ReadLine();
-                
+
                 Console.WriteLine("Enter Last Name:");
                 string lastName = Console.ReadLine();
 
@@ -87,19 +93,19 @@ namespace PhoneBookTestApp
                 Console.WriteLine("------------------PhoneBook----------------");
                 phonebook.PrintPhoneBook(Display.Print);
 
-               
-                Console.ReadLine();
-}
-catch(Exception ex)
-{
- Console.WriteLine(ex.Message);
 
- }
+                Console.ReadLine();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+            }
             finally
             {
                 DatabaseUtil.CleanUp();
             }
         }
-        
+
     }
 }

@@ -63,5 +63,39 @@ namespace PhoneBookTestApp
                 throw;
             }
         }
+
+        public Person findPersonByName(string firstName,string lastName)
+        {
+            try
+            {
+                using (var sQLiteConnection = DatabaseUtil.GetConnection())
+                {
+                    var sqlString = "";
+                    Person person = null;
+                    if (!string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName))
+                    {
+                        sqlString = "select *from PHONEBOOK where Name Like '" + firstName + "%' and Name Like '%" + lastName + "' LIMIT 1";
+                    }
+
+                    SQLiteDataReader sQLiteData = DatabaseUtil.GetPersonDetail(sqlString, sQLiteConnection);
+                    if (sQLiteData.HasRows)
+                    {
+                        while (sQLiteData.Read())
+                        {
+                            person = new Person();
+                            person.Name = sQLiteData[0].ToString();
+                            person.PhoneNumber = sQLiteData[1].ToString();
+                            person.Address = sQLiteData[2].ToString();
+                        }
+                    }
+
+                    return person;
+                }
+            }
+            catch
+            {
+                throw;
+            }
         }
+    }
     }
